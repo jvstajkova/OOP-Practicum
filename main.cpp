@@ -1,58 +1,37 @@
 #include<iostream>
+#include<string.h>
 using namespace std;
 
-struct Person
-	{
-	char first_name[15];
-	char last_name[15];		
-    };
-
-struct Client
+struct Destination
 {
-	Person name[30];
-	int bank_account;
-	int amount;
+	char city[32];
+	int kilometers;
 };
 
-	
 int main()
+{
+	Destination destination1[2]={{ "Plovdiv", 165 }, { "Varna", 469 } };
+	for (int i = 0; i<2; i++)
 	{
-		
-		Client client[30];
-		int n;
-		cout << "People: ";
-		cin >> n;
-		for (int i = 0; i < n; i++)
-		{
-			cout << "First name:  ";
-			cin >> client[i].name[i].first_name;
-			cout << "Last name: ";
-			cin >> client[i].name[i].last_name;	
-			cout << "Money: ";
-			cin >> client[i].amount;
-		}
-		cout << endl;
-		cout << endl;
-
-		for (int i = 0; i < n; i++)
-		{
-			cout << "First name: " << client[i].name[i].first_name;
-			cout << "Last name: " << client[i].name[i].last_name;
-			cout << "Money: " << client[i].amount;
-			cout << endl;
-		}
-		cout << endl;
-		cout << endl;
-
-		int sum = 0;
-		for (int i = 0; i < n; i++)
-		{
-			sum += client[i].amount;
-		}
-		cout << "Sum= " << sum << endl;
-		cout << endl;
-
-
-		system("pause");
-		return 0;
+		cout << destination1[i].city << " " << destination1[i].kilometers << endl;
 	}
+	cout << endl;
+
+	Destination destination2[30];
+	for (int i = 0; i<30; i++)
+	{
+		strcpy_s(destination2[i].city, "");
+		destination2[i].kilometers = 0;
+	}
+
+	Destination destination3[5] = { { "Plovdiv", 165 }, { "Varna", 469 }, { "Burgas", 393 }, { "Vidin", 199 }, { "Dobrich", 512 } };
+	for (int i = 0; i<5; i++)
+	{
+		cout << destination3[i].city << " " << destination3[i].kilometers << endl;
+	}
+	cout << endl;
+
+
+	system("pause");
+	return 0;
+}
