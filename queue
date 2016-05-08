@@ -1,0 +1,124 @@
+#include<iostream>
+using namespace std;
+
+template <class T>
+struct Elem_queue
+{
+	T value;
+	Elem_queue<T> *link;
+};
+
+template <class T>
+class Queue
+{
+private: 
+	Elem_queue<T> *tail;
+	Elem_queue<T> *head;
+public: 
+	Queue()
+	{
+
+	}
+	Queue(Queue &p)
+	{
+		Elem_queue<T> *q = p.head;
+		head = new Elem_queue<T>();
+		tail = new Elem_queue<T>();
+		head = p.head;
+		while (q->link != 0)
+		{
+			tail->value = q->value;
+			tail->link = new Elem_queue<T>();
+			tail = tail->link;
+			q = q->link;
+		}
+	}
+	~Queue()
+	{
+		while (head != 0) 
+		{
+			Elem_queue<T> *q = head;
+			head = head->link;
+			delete q;
+		}
+		//Queue(const Queue&);
+		void operator=( MyQueue& p)
+		{
+			Elem_queue<T> *q = p.head;
+			head = new Elem_queue<T>();
+			tail = new Elem_queue<T>();
+			head = p.head;
+			while (q->link != 0)
+			{
+				tail->value = q->value;
+				tail->link = new Elem_queue<T>();
+				tail = tail->link;
+				q = q->link;
+			}
+		}
+		void enqueue(T data)
+		{
+			Elem_queue<T> *q = new Elem_queue<T>();
+			q->value = data;
+			q->link = 0;
+			if (head == 0)
+			{
+				head = q;
+				tail = q;
+				tail->link = 0;
+			}
+			else
+			{
+				tail->link = q;
+				tail = q;
+			}
+		}
+		void dequeue()
+		{
+			if (head != 0)
+				head = head->link;
+		}
+		T top()
+		{
+			return head->value;
+		}
+		bool isEmpty()
+		{
+			if (head == 0) return true;
+			return false;
+		}
+	}
+};
+
+template <typename T>
+void concat(Queue<T> &first, Queue<T> second)
+{
+	while (!second.isEmpty()) 
+	{
+		first.enqueue(second.top());
+		second.dequeue();
+	}
+}
+
+template <typename T>
+void print(Queue<T> queue)
+{
+	while (!queue.isEmpty())
+	{
+		cout << queue.top();
+		queue.dequeue();
+	}
+}
+
+int main() 
+{
+	Queue<int> queue1, queue2;
+	for (int i = 0; i < 6; i++)
+	{
+		queue1.enqueue(i);
+		queue2.enqueue(6 - i);
+	}
+	concat(queue1, queue2);
+	print(queue1);
+	system("pause");
+}
