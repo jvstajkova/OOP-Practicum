@@ -1,0 +1,205 @@
+#include<iostream>
+using namespace std;
+
+class Product
+{
+public:
+	virtual double price() const = 0;
+	virtual void print() const = 0;
+
+	virtual ~Product()
+	{
+
+	}
+};
+
+class Fruit:public Product
+{
+protected:
+	char* type;
+	double weightInGrams;
+	double priceForAKilogram;
+public:
+	Fruit(char* _type, double _weightInGrams, double _priceForAKilogram)
+	{
+		weightInGrams = _weightInGrams;
+		priceForAKilogram = _priceForAKilogram;
+
+		int typesLength = strlen(_type) + 1;
+		this->type = new char[typesLength];
+		strcpy_s(this->type, typesLength, _type);
+	}
+	Fruit(const Fruit& other)
+	{
+		int typesLength = strlen(other.getType()) + 1;
+		type = new char[typesLength];
+		strcpy_s(type, typesLength, other.getType());
+	}
+	Fruit& operator = (const Fruit& other)
+	{
+		if (this != &other)
+		{
+			delete[] type;
+
+			int typesLength = strlen(other.getType()) + 1;
+			this->type = new char[typesLength];
+			strcpy_s(type, typesLength, other.getType());
+		}
+		return *this;
+
+	}
+	~Fruit()
+	{
+		delete[] type;
+	}
+	char* getType() const
+	{
+		return type;
+	}
+	double getPriceOfAKilogram() const
+	{
+		return priceForAKilogram;
+	}
+	double getWeightInGrams() const
+	{
+		return weightInGrams;
+	}
+	double price() const
+	{
+		return (weightInGrams / 1000)*priceForAKilogram;
+	}
+	void print() const
+	{
+		cout << "Fruit's information: " << endl;
+		cout << "Type: " << type << endl;
+		cout << "Weight: " << weightInGrams << endl;
+		cout << "Price for a kilogram: " << priceForAKilogram << endl;
+		cout << "Price of the fruit: " << price() << endl;
+	}
+};
+
+class Beer :public Product
+{
+protected:
+	char* typeOfTheContainer;
+	char* brand;
+	double priceForAContainer;
+public:
+	Beer(char* _typeOfTheContainer, char* _brand, double _priceForAContainer)
+	{
+		priceForAContainer = _priceForAContainer;
+
+		int typesLength = strlen(_typeOfTheContainer) + 1;
+		this->typeOfTheContainer = new char[typesLength];
+		strcpy_s(this->typeOfTheContainer, typesLength, _typeOfTheContainer);
+
+		int brandsLength = strlen(_brand) + 1;
+		this->brand = new char[brandsLength];
+		strcpy_s(this->brand, brandsLength, _brand);
+	}
+	Beer(const Beer& other)
+	{
+		int typesLength = strlen(other.getType()) + 1;
+		typeOfTheContainer = new char[typesLength];
+		strcpy_s(typeOfTheContainer, typesLength, other.getType());
+
+		int brandsLength = strlen(other.getBrand()) + 1;
+		this->brand = new char[brandsLength];
+		strcpy_s(brand, brandsLength, other.getBrand());
+	}
+	Beer& operator = (const Beer& other)
+	{
+		if (this != &other)
+		{
+			delete[] typeOfTheContainer;
+
+			int typesLength = strlen(other.getType()) + 1;
+			this->typeOfTheContainer = new char[typesLength];
+			strcpy_s(typeOfTheContainer, typesLength, other.getType());
+
+			int brandsLength = strlen(other.getBrand()) + 1;
+			this->brand = new char[brandsLength];
+			strcpy_s(brand, brandsLength, other.getBrand());
+		}
+		return *this;
+
+	}
+	~Beer()
+	{
+		delete[] typeOfTheContainer;
+		delete[] brand;
+	}
+	
+	char* getType() const
+	{
+		return typeOfTheContainer;
+	}
+	char* getBrand() const
+	{
+		return brand;
+	}
+	double getPriceForAContainer() const
+	{
+		return priceForAContainer;
+	}
+	double price() const
+	{
+		return priceForAContainer;
+	}
+	void print() const
+	{
+		cout << "Beer's information: " << endl;
+		cout << "Type of the container: " << typeOfTheContainer << endl;
+		cout << "Brand: " << brand << endl;
+		cout << "Price for a container: " << priceForAContainer << endl;
+		cout << "Total price: " << price() << endl;
+	}
+
+
+};
+
+void merge(Product** products, Fruit* fruits, Beer* beers)
+{
+	for (int i = 0; i < 5; i++)
+	{
+		products[i] = new Fruit(fruits[i]);
+	}
+
+	for (int i = 0; i < 5; i++)
+	{
+		products[i + 5] = new Beer(beers[i]);
+	}
+}
+void print(Product** products, int productsSize){
+	for (int i = 0; i < productsSize; i++)
+	{
+		products[i]->print();
+	}
+}
+int main()
+{
+	Fruit fruits[5] {Fruit("apple", 0.200, 2.10 ), Fruit("orange", 0.430, 2.40), Fruit("banana",1.360,2.35),
+		Fruit("strawberry", 2.500, 2.50), Fruit("berry",  3.600, 3.50)};
+	Beer beers[5] { Beer("glass", "Shumensko", 1.40),Beer("can", "Pirinsko", 2.10), Beer ("plastic", "Ariana", 2.05), 
+		Beer("glass", "Staropramen", 1.95), Beer("plastic", "Stolichna", 1.50) };
+
+	Product** products = new Product*[20];
+
+	merge(products, fruits, beers);
+
+	for (int i = 0; i < 10; i++)
+	{
+		products[i]->print();
+		cout << endl;
+
+	}
+	cout << endl;
+	for (int i = 0; i < 10; i++)
+	{
+		delete products[i];
+	}
+
+	system("pause");
+	return 0;
+
+}
